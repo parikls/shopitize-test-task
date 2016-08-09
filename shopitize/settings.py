@@ -182,7 +182,7 @@ TWITTER_CONSUMER_SECRET = "7VRSkI6po3HIKuHgq2BQ9S8JJNZeD11iPKXkPBI6RmmCMBYkdt"
 # improve speed of album creation. But there is possibility that images could be removed
 # from dedicated hosts. If we want to keep images locally - set to True
 
-PERSIST_IMAGES_TO_DB = True
+PERSIST_IMAGES_TO_DB = False
 
 if PERSIST_IMAGES_TO_DB:
     # ensure that media directory created
