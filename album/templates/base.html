@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load staticfiles %}
     <meta charset="UTF-8">
     <title>Twitter Albums</title>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <link rel="stylesheet" href="{% static 'album.css' %}">
 </head>
 <body>
 
-<style>
-    #main-container {
-        margin-top: 5%;
-    }
-</style>
 <nav class="deep-orange accent-2">
     <div class="nav-wrapper">
       <a href="{% url 'album:album' %}" class="brand-logo center">Album Creator</a>
