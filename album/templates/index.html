@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block main %}
+    <form method="post" action="{% url 'album:album' %}"> {% csrf_token %}
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        <input placeholder="Provide a hashtag to create album" name="hashtag" id="hashtag" type="text">
+                        <label for="hashtag">hashtag</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <p class="center-align">
+                        <span>{{ error }}</span>
+                    </p>
+                    <p class="center-align">
+                        {{ form.hashtag.errors }}
+                    </p>
+
+                </div>
+                <div class="row">
+                    <p class="center-align">
+                        <button type="submit" class="btn deep-orange accent-2">Create!</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col s12 m12 l12">
+            {% for album in albums %}
+                {% if forloop.counter0|divisibleby:3 or forloop.first %}
+                    <div class="row">
+                {% endif %}
+            <div class="col s4 m4 l4">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <a href="{% url 'album:album_details' pk=album.pk %}">
+                            <img class="activator" src="{{ album.preview_image.media_url }}">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <p class="center-align">
+                            <a href="{% url 'album:album_details' pk=album.pk %}"
+                               class="card-title activator grey-text text-darken-4">{{ album.hashtag }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

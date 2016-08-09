@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitter Albums</title>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+</head>
+<body>
+
+<style>
+    #main-container {
+        margin-top: 5%;
+    }
+</style>
+<nav class="deep-orange accent-2">
+    <div class="nav-wrapper">
+      <a href="{% url 'album:album' %}" class="brand-logo center">Album Creator</a>
+    </div>
+  </nav>
+<div class="container" id="main-container">
+
+{% block main %}
+{% endblock %}
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+</body>
+</html>

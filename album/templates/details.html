@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block main %}
+    <div class="row">
+    <h4 class="center-align"><a href="{{ album.get_absolute_url }}">{{ album.hashtag }}</a></h4>
+    </div>
+    <div class="row">
+    <form method="post" action="{% url 'album:album_details' album.pk %}">{% csrf_token %}
+    <p class="center-align">
+        <button class="btn deep-orange accent-2" type="submit">Refresh !!!</button>
+    </p>
+        </form>
+    <p class="center-align red-text">{{ error }}</p>
+
+    </div>
+
+    <div class="row">
+        <div class="col s12 m12 l12">
+            {% for image in album.images %}
+                {% if forloop.counter0|divisibleby:3 or forloop.first %}
+                    <div class="row">
+                {% endif %}
+            <div class="col s4 m4 l4">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <a href="{{ image.url }}" target="_blank">
+                            <img class="activator" src="{{ image.media_url }}">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <p class="center-align">
+                            <a href="{{ image.url }}" target="_blank"
+                               class="card-title activator grey-text text-darken-4">{{ image.url }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
