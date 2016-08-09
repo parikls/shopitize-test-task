@@ -8,15 +8,22 @@ from django.test import TestCase, Client, override_settings
 from album.exceptions import ServiceException
 from album.models import Image, Album
 from album.util import is_valid_hashtag
-from shopitize.settings import BASE_DIR
+from shopitize.settings import BASE_DIR, MEDIA_ROOT
 from twitter.exceptions import TwitterException
+
+TEST_MEDIA_ROOT = os.path.join(BASE_DIR, 'media', 'test')
 
 
 @override_settings(PERSIST_IMAGES_TO_DB=False)
+@override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
 class BaseTestCases(TestCase):
     def setUp(self):
+        if not os.path.isdir(MEDIA_ROOT):
+            os.mkdir(MEDIA_ROOT)
+        if not os.path.isdir(TEST_MEDIA_ROOT):
+            os.mkdir(TEST_MEDIA_ROOT)
         self.client = Client()
-        _temp_file = NamedTemporaryFile(dir=os.path.join(BASE_DIR, 'media'), delete=True)
+        _temp_file = NamedTemporaryFile(dir=TEST_MEDIA_ROOT, delete=True)
         _temp_file.write(b"0")
         _temp_file.flush()
         self._album = Album.objects.create(hashtag="#hashtag")
@@ -29,8 +36,8 @@ class BaseTestCases(TestCase):
         )
 
     def tearDown(self):
-        for file in os.listdir(os.path.join(BASE_DIR, 'media')):
-            os.unlink(os.path.join(BASE_DIR, 'media', file))
+        for file in os.listdir(TEST_MEDIA_ROOT):
+            os.unlink(os.path.join(TEST_MEDIA_ROOT, file))
 
 
 class ViewTestCases(BaseTestCases):

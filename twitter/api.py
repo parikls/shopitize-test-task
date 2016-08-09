@@ -121,7 +121,7 @@ class Api:
         response = requests.post(url=self._oauth_url, data=data, headers=headers, proxies=self._proxies)
 
         if response.status_code != 200:
-            raise TwitterException("Could perform OAuth authorization. status_code=%d. message=%s" %
+            raise TwitterException("Could not perform OAuth authorization. status_code=%d. message=%s" %
                                    (response.status_code, response.json()))
 
         self._oauth_token = response.json().get("access_token")
