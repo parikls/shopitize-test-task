@@ -17,11 +17,6 @@ from twitter.exceptions import TwitterException
 
 logger = logging.getLogger(__name__)
 
-twitter = Api(
-    consumer_key=TWITTER_CONSUMER_KEY,
-    consumer_secret=TWITTER_CONSUMER_SECRET
-)
-
 
 class AlbumManager(models.Manager):
     def to_dict_all(self):
@@ -34,6 +29,8 @@ class AlbumManager(models.Manager):
 class AlbumServiceManager(models.Manager):
     def __init__(self):
         super().__init__()
+
+        self.__twitter = None
         self.MAX_IMAGES_IN_ALBUM = 100
 
     def create_album(self, hashtag):
@@ -114,6 +111,8 @@ class AlbumServiceManager(models.Manager):
         :return List of Image instances fetched from twitter response
         """
 
+        self.__init_twitter_api()
+
         logger.debug("Start image collecting")
         params = dict(
             q="%s filter:images" % album.hashtag,
@@ -126,7 +125,7 @@ class AlbumServiceManager(models.Manager):
 
         logger.debug("Params for twitter request=%s" % params)
         try:
-            twitter_response = twitter.search(params=params)
+            twitter_response = self.__twitter.search(params=params)
         except TwitterException as exc:
             logger.error("Exception in twitter request. %s" % exc.msg)
             raise ServiceException("Could not obtain data from Twitter", status_code=503)
@@ -174,6 +173,14 @@ class AlbumServiceManager(models.Manager):
                     # re-raise exception to reflect it in response
                     raise ServiceException("Error occurred while downloading photo =( ", status_code=500)
         logger.debug("end populating of files to Image instances")
+
+    def __init_twitter_api(self):
+        if not self.__twitter:
+            logger.debug("Initializing twitter API")
+            try:
+                self.__twitter = Api(consumer_key=TWITTER_CONSUMER_KEY, consumer_secret=TWITTER_CONSUMER_SECRET)
+            except Exception:
+                raise ServiceException(msg="Could not connect to Twitter", status_code=503)
 
 
 class Album(models.Model):

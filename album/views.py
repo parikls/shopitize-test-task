@@ -83,7 +83,6 @@ class ApiAlbumDetailsView(View):
 
 
 class TemplateAlbumListView(View):
-
     def get(self, request):
         logger.debug("TemplateAlbumView. GET. rendering index.html with all Albums")
         return render(request, 'index.html', context={'albums': Album.objects.to_dict_all()})
@@ -98,9 +97,8 @@ class TemplateAlbumListView(View):
                 logger.debug("TemplateAlbumView. POST. successfully created new album with pk=%s" % album.pk)
                 return redirect("album:album_details", pk=album.pk)
             except ServiceException as exc:
-                logger.debug(
-                    "TemplateAlbumView. POST. Error while creating new album from hashtag=%s. exception=%s" %
-                    (hashtag, exc.msg))
+                logger.debug("TemplateAlbumView. POST. Error while creating new album from hashtag=%s. exception=%s" %
+                             (hashtag, exc.msg))
                 return TemplateResponse(request, "index.html", context={"error": exc.msg})
 
         # form is not valid
